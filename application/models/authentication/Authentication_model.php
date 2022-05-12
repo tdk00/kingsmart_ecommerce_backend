@@ -6,42 +6,42 @@ class Authentication_model extends CI_Model
 		$this->load->database();
 	}
 
-	public function insertCustomer( $phone = "" )
+	public function insertUser($mobile = "" )
 	{
 		$data = [
-			"phone" => $phone
+			"mobile" => $mobile
 		];
-		$this->db->insert('customers', $data );
+		$this->db->insert('user', $data );
 		return $this->db->insert_id();
 	}
 
-	public function insertOtp( $otp, $customer_id, $expired )
+	public function insertOtp($otp, $user_id, $expired )
 	{
 		$data = [
-			"customer_id" => $customer_id,
+			"user_id" => $user_id,
 			"otp" => $otp,
 			"expired" => $expired
 		];
-		$this->db->insert('customer_authentication', $data );
+		$this->db->insert('user_authentication', $data );
 		return $this->db->insert_id();
 	}
 
-	public function getCustomerId( $phone )
+	public function getUserId( $mobile )
 	{
 		$this->db->select('*');
-		$this->db->from('customers');
-		$this->db->where('phone', $phone);
+		$this->db->from('user');
+		$this->db->where('mobile', $mobile);
 		$query = $this->db->get();
 		$result_array = $query->result_array();
 
 		return count($result_array) > 0 ? $result_array[0]['id'] : 0;
 	}
 
-	public function checkOtp( $customer_id, $otp )
+	public function checkOtp($user_id, $otp )
 	{
 		$this->db->select('*');
-		$this->db->from('customer_authentication');
-		$this->db->where('customer_id', $customer_id);
+		$this->db->from('user_authentication');
+		$this->db->where('user_id', $user_id);
 		$this->db->where('otp', $otp);
 		$this->db->where('expired > ', time() );
 		$query = $this->db->get();
@@ -51,9 +51,9 @@ class Authentication_model extends CI_Model
 	}
 
 
-	public function deleteCustomerOldOtp( $customer_id = 0 )
+	public function deleteUserOldOtp( $user_id = 0 )
 	{
-		$removed_all = $this->db->delete( 'customer_authentication', array('customer_id' => $customer_id) );
+		$removed_all = $this->db->delete( 'user_authentication', array('user_id' => $user_id) );
 
 		if( $removed_all )
 		{

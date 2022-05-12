@@ -19,34 +19,34 @@ class Authentication extends RestController
 
 	/**
 	 * OTP yaradan metoddur
-	 * eger customer movcud deyilse register edir sonra OTP yaradir
-	 * eger customer movcuddursa bazadan butun kohne OTP-lerini silir , yenisini yaradir
+	 * eger user movcud deyilse register edir sonra OTP yaradir
+	 * eger user movcuddursa bazadan butun kohne OTP-lerini silir , yenisini yaradir
 	 * @return integer otp yaradilarsa id-sini qaytarir yoxsa 0
 	 */
 	public function create_otp_post()
 	{
-		$phone = $this->post( 'phone' );
+		$mobile = $this->post( 'mobile' );
 
-		$phone = "00".str_replace(['+', '-', ' ', '(', ')'],'', $phone );
+		$mobile = "00".str_replace(['+', '-', ' ', '(', ')'],'', $mobile );
 
-		if( ! $this->validate_phone($phone))
+		if( ! $this->validate_mobile($mobile))
 		{
 			$this->response( [ "status" => FALSE ] , 200 );
 		}
 
 
-		if ( ! $this->customer_exists( $phone ) )
+		if ( ! $this->user_exists( $mobile ) )
 		{
-			$customer_id = $this->AuthenticationModel->insertCustomer( $phone );
-			$this->generate_otp( $customer_id );
+			$user_id = $this->AuthenticationModel->insertUser( $mobile );
+			$this->generate_otp( $user_id );
 			$this->response( [ "status" => TRUE ] , 200 );
 		}
 		else
 		{
-			$customer_id = $this->AuthenticationModel->getCustomerId( $phone );
-			if( $customer_id > 0 ) {
-				$this->AuthenticationModel->deleteCustomerOldOtp( $customer_id );
-				$this->generate_otp( $customer_id );
+			$user_id = $this->AuthenticationModel->getUserId( $mobile );
+			if( $user_id > 0 ) {
+				$this->AuthenticationModel->deleteUserOldOtp( $user_id );
+				$this->generate_otp( $user_id );
 				$this->response( [ "status" => TRUE ] , 200 );
 
 			}
@@ -58,32 +58,32 @@ class Authentication extends RestController
 
 	public function confirm_otp_post()
 	{
-		$phone = $this->post( 'phone' );
+		$mobile = $this->post( 'mobile' );
 		$otp = $this->post( 'otp' );
 
-		$phone = "00".str_replace(['+', '-', ' ', '(', ')'],'', $phone );
+		$mobile = "00".str_replace(['+', '-', ' ', '(', ')'],'', $mobile );
 
-		if( ! $this->validate_phone($phone))
+		if( ! $this->validate_mobile($mobile))
 		{
 			$this->response( [ "status" => FALSE ] , 200 );
 		}
 
-		$customer_id = $this->AuthenticationModel->getCustomerId( $phone );
-		if ( $customer_id > 0 )
+		$user_id = $this->AuthenticationModel->getUserId( $mobile );
+		if ( $user_id > 0 )
 		{
-			$otpIsTrue = $this->AuthenticationModel->checkOtp( $customer_id, $otp );
+			$otpIsTrue = $this->AuthenticationModel->checkOtp( $user_id, $otp );
 			if( $otpIsTrue )
 			{
 				$this->load->library('Authorization_Token');
-				$token_data['customer_id'] = $customer_id;
+				$token_data['user_id'] = $user_id;
 				$token_data['time'] = time();
 
-				$customer_token = $this->authorization_token->generateToken( $token_data );
+				$user_token = $this->authorization_token->generateToken( $token_data );
 
 				$this->response( [
 					"status" => TRUE,
-					"customer_id" => $customer_id,
-					"customer_token" => $customer_token
+					"user_id" => $user_id,
+					"user_token" => $user_token
 				] , 200 );
 			}
 		}
@@ -95,26 +95,26 @@ class Authentication extends RestController
 
 	/**
 	 * OTP generate eden ve bazaya insert eden metoddur
-	 * @param $customer_id - OTP nin yaradilacagi customer'in id si
-	 * @var $expired - OTP nin vaxtinin biteceyi epch time
+	 * @param $user_id - OTP nin yaradilacagi user'in id si
+	 * @var $expired - OTP nin vaxtinin biteceyi epoch time
 	 * @return integer sone elave edilen OTP - idsi ni qaytarir
 	 */
-	private function generate_otp( $customer_id )
+	private function generate_otp( $user_id )
 	{
 		$otp = rand(1000, 9999);
 		$lifetime = 900; // seconds
 		$expired = time() + $lifetime;
-		return $this->AuthenticationModel->insertOtp( $otp, $customer_id, $expired );
+		return $this->AuthenticationModel->insertOtp( $otp, $user_id, $expired );
 	}
 
-	private function customer_exists( $phone )
+	private function user_exists( $mobile )
 	{
-		return $this->AuthenticationModel->getCustomerId( $phone );
+		return $this->AuthenticationModel->getUserId( $mobile );
 	}
 
-	private function validate_phone( $phone )
+	private function validate_mobile( $mobile )
 	{
-		$valid_number = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
-		return $valid_number == $phone;
+		$valid_number = filter_var($mobile, FILTER_SANITIZE_NUMBER_INT);
+		return $valid_number == $mobile;
 	}
 }
