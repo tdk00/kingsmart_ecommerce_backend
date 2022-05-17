@@ -10,7 +10,7 @@ class Product_model extends CI_Model
 	{
 		if( is_integer( $productId ) && is_integer( $userId ) )
 		{
-			$query = $this->db->query('SELECT product.*, IFNULL((SELECT user_favorite.userId FROM user_favorite WHERE user_favorite.userId = '. $userId .' AND  user_favorite.productId = '. $productId .'), 0 ) AS isFavorite FROM `product` WHERE product.id = '. $productId .';');
+			$query = $this->db->query('SELECT product.*, IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, IFNULL((SELECT user_favorite.userId FROM user_favorite WHERE user_favorite.userId = '. $userId .' AND  user_favorite.productId = '. $productId .'), 0 ) AS isFavorite FROM `product` WHERE product.id = '. $productId .';');
 		}
 		else
 		{
