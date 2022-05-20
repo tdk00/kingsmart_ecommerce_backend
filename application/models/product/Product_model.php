@@ -28,4 +28,22 @@ class Product_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+
+	public function getFavoriteProducts( $userId = 0, $limit =  0 )
+	{
+		$limitQuery = $limit > 0 ? "LIMIT ".$limit : "";
+		$query = $this->db->query('SELECT product.*, IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, 1 AS isFavorite FROM `product` WHERE EXISTS (SELECT user_favorite.userId FROM user_favorite WHERE user_favorite.userId = '. $userId .' AND user_favorite.productId = product.id)'. $limitQuery .';');
+		return $query->result_array();
+	}
+	public function deleteFromFavorites( $userId = 0 , $productId = 0)
+	{
+		$this->db->delete( 'user_favorite', array('userId' => $userId, 'productId' => $productId) );
+		return false;
+	}
+	public function insertFavorites( $userId = 0 , $productId = 0)
+	{
+		$this->db->delete( 'user_favorite', array('userId' => $userId, 'productId' => $productId) );
+		$this->db->insert('user_favorite', array( 'userId' => $userId, 'productId' => $productId ) );
+		return true;
+	}
 }

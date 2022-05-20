@@ -33,6 +33,7 @@ class ShoppingCart extends RestController
 		$cartItems = $this->cart->getItems();
 		$cartId = $this->cart->getCartId();
 		$cartTotal = $this->cart->getTotal();
+		sleep(2);
 
 		if( $cartId == 0)
 		{
