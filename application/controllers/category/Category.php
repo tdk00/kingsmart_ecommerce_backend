@@ -26,4 +26,41 @@ class Category extends RestController
 		}
 		$this->response( [ "status" => TRUE, "data" => $categories ] , 200 );
 	}
+
+	public function fetch_main_categories_post()
+	{
+//		sleep(5);
+		$categories = $this->CategoryModel->getMainCategories();
+		if( count( $categories ) == 0 )
+		{
+			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
+		}
+		$this->response( [ "status" => TRUE, "data" => $categories ] , 200 );
+	}
+
+	public function fetch_products_by_category_id_post()
+	{
+//		sleep(5);
+		$sortByWhiteList = [ 'none','priceLowToHigh', 'priceHighToLow' ];
+		$sortBy = $this->post('sort_by');
+		$categoryId = $this->post('category_id');
+		$userId = $this->post('user_id');
+
+		if( ! ( $categoryId > 0 ) ||  ! ( $userId > 0 ) )
+		{
+			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
+		}
+
+		if( ! in_array( $sortBy, $sortByWhiteList ) )
+		{
+			$sortBy = 'none';
+		}
+		$productList = $this->CategoryModel->getProductByCategoryId( $userId, $categoryId, $sortBy );
+		if( count( $productList ) == 0 )
+		{
+			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
+		}
+		$this->response( [ "status" => TRUE, "data" => $productList ] , 200 );
+	}
+
 }
