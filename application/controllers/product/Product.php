@@ -17,6 +17,34 @@ class Product extends RestController
 		$this->load->library('form_validation');
 	}
 
+	public function fetch_product_by_id_post()
+	{
+//		sleep(2);
+		$userId = $this->post('user_id');
+		$productId = $this->post('product_id');
+
+		$product = $this->ProductModel->getProductById( (int)$productId, (int)$userId );
+		if( count( $product ) == 0 )
+		{
+			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
+		}
+		$this->response( [ "status" => TRUE, "data" => ["product" => $product]  ] , 200 );
+	}
+
+	public function fetch_related_products_post()
+	{
+//		sleep(2);
+		$userId = $this->post('user_id');
+		$productId = $this->post('product_id');
+
+		$productList = $this->ProductModel->getRelatedProducts( (int)$productId, (int)$userId );
+		if( count( $productList ) == 0 )
+		{
+			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
+		}
+		$this->response( [ "status" => TRUE, "data" => $productList  ] , 200 );
+	}
+
 	public function fetch_favorite_products_post()
 	{
 //		sleep(2);
@@ -67,6 +95,23 @@ class Product extends RestController
 
 
 			$this->response( [ "status" => true, "data" => ["isFavorite" => $isFavorite]  ] , 200 );
+
+	}
+
+	public function edit_note_post()
+	{
+		$userId = $this->post('user_id');
+		$productId = $this->post('product_id');
+		$note = $this->post('note');
+
+		if( empty( $userId ) || ! (int)$userId > 0 || empty( $productId ) || ! (int)$productId > 0 && empty( $note ))
+		{
+			$this->response( [ "status" => false ] , 200 );
+		}
+
+		$note = $this->ProductModel->insertNote( (int)$userId, $productId, $note );
+
+		$this->response( [ "status" => true, "data" => ["note" => $note]  ] , 200 );
 
 	}
 

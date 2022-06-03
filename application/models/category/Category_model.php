@@ -39,7 +39,7 @@ class Category_model extends CI_Model
 		{
 			$orderByQuery = '';
 		}
-		$query = $this->db->query('SELECT product.*,  IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, IFNULL(user_favorite.productId, 0) > 0 as isFavorite FROM product LEFT JOIN product_category ON product.id = product_category.productId LEFT JOIN user_favorite ON product.id = user_favorite.productId AND user_favorite.userId = '. (int)$userId .' WHERE product_category.categoryId = '. $categoryId . $orderByQuery .';');
+		$query = $this->db->query('SELECT product.*,  IFNULL(user_product_note.note, "") as note, IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, IFNULL(user_favorite.productId, 0) > 0 as isFavorite FROM product LEFT JOIN product_category ON product.id = product_category.productId LEFT JOIN user_favorite ON product.id = user_favorite.productId AND user_favorite.userId = '. (int)$userId .' LEFT JOIN user_product_note ON product.id = user_product_note.productId AND user_product_note.userId = '. (int)$userId .' WHERE product_category.categoryId = '. $categoryId . $orderByQuery .';');
 		return $query->result_array();
 	}
 
@@ -57,7 +57,7 @@ class Category_model extends CI_Model
 		{
 			$orderByQuery = '';
 		}
-		$query = $this->db->query('SELECT product.*, IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, 1 AS isFavorite FROM `product` WHERE EXISTS (SELECT user_favorite.userId FROM user_favorite WHERE user_favorite.userId = '. $userId .' AND user_favorite.productId = product.id)'. $orderByQuery .';');
+		$query = $this->db->query('SELECT product.*, IFNULL(user_product_note.note, "") as note, IF( ( product.oldPrice - product.price ) > 0 , IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, 1 AS isFavorite FROM `product` WHERE EXISTS (SELECT user_favorite.userId FROM user_favorite WHERE user_favorite.userId = '. $userId .' AND user_favorite.productId = product.id) LEFT JOIN user_product_note ON product.id = user_product_note.productId AND user_product_note.userId = '. (int)$userId . $orderByQuery .';');
 		return $query->result_array();
 	}
 
@@ -76,7 +76,7 @@ class Category_model extends CI_Model
 		{
 			$orderByQuery = '';
 		}
-		$query = $this->db->query("SELECT product.*,  IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, IFNULL(user_favorite.productId, 0) > 0 as isFavorite FROM product LEFT JOIN product_category ON product.id = product_category.productId LEFT JOIN user_favorite ON product.id = user_favorite.productId AND user_favorite.userId = ". (int)$userId ." WHERE product.title LIKE '%". $searchKeyWord ."%'".$orderByQuery .";");
+		$query = $this->db->query("SELECT product.*, IFNULL(user_product_note.note, '') as note,  IF( ( product.oldPrice - product.price ) > 0 , product.oldPrice - product.price, 0 ) as discount, IFNULL(user_favorite.productId, 0) > 0 as isFavorite FROM product LEFT JOIN product_category ON product.id = product_category.productId LEFT JOIN user_favorite ON product.id = user_favorite.productId AND user_favorite.userId = ". (int)$userId ." LEFT JOIN user_product_note ON product.id = user_product_note.productId AND user_product_note.userId = ". (int)$userId." WHERE product.title LIKE '%". $searchKeyWord ."%'".$orderByQuery .";");
 		return $query->result_array();
 	}
 
