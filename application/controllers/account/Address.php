@@ -19,7 +19,7 @@ class Address extends RestController
 
 	public function fetch_addresses_post()
 	{
-		sleep(2);
+//		sleep(2);
 		$userId = $this->post('user_id');
 
 		$addresses = $this->AddressModel->getAddresses( (int)$userId );
@@ -28,6 +28,19 @@ class Address extends RestController
 			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
 		}
 		$this->response( [ "status" => TRUE, "data" => $addresses ] , 200 );
+	}
+
+	public function fetch_selected_address_post()
+	{
+//		sleep(2);
+		$userId = $this->post('user_id');
+
+		$address = $this->AddressModel->getSelectedAddress( (int)$userId );
+		if( count( $address ) == 0 )
+		{
+			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
+		}
+		$this->response( [ "status" => TRUE, "data" => $address[0] ] , 200 );
 	}
 
 	public function fetch_address_by_id_post()
@@ -72,6 +85,31 @@ class Address extends RestController
 		{
 			$this->AddressModel->deleteAddress( (int)$userId, $addressId );
 			$this->response( [ "status" => TRUE ] , 200 );
+		}
+		else
+		{
+			$this->response( [ "status" => false ] );
+		}
+
+	}
+
+	public function set_selected_address_post()
+	{
+//		sleep(2);
+		$userId = $this->post('user_id');
+		$addressId = $this->post('address_id');
+
+		if( $addressId > 0 )
+		{
+			$updated = $this->AddressModel->setSelectedAddress( (int)$userId, $addressId );
+			if( $updated )
+			{
+				$this->response( [ "status" => TRUE ] , 200 );
+			}
+			else
+			{
+				$this->response( [ "status" => false ] );
+			}
 		}
 		else
 		{

@@ -15,6 +15,16 @@ class Address_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function getSelectedAddress( $userId = 0 )
+	{
+		$this->db->select("*");
+		$this->db->from("address");
+		$this->db->where("userId", $userId);
+		$this->db->where("selected", 1);
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
 	public function getAddressById( $userId = 0, $addressId = 0 )
 	{
 		$this->db->select("*");
@@ -67,6 +77,22 @@ class Address_model extends CI_Model
 		$this->db->where('id', $addressId);
 		$this->db->where('userId', $userId);
 		$this->db->delete('address');
+		return true;
+	}
+
+	public function setSelectedAddress( $userId = 0, $addressId = 0 )
+	{
+
+		$this->resetDefaultAddresses( $userId );
+
+		$this->db->where('userId', $userId);
+		$this->db->where('id', $addressId);
+		$this->db->update('address', [ 'selected' => 1 ]);
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE)
+		{
+			return false;
+		}
 		return true;
 	}
 
