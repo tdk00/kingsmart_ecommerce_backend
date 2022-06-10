@@ -52,7 +52,7 @@ class ShoppingCartLibrary {
 
 	public function setTotal(){
 		foreach  ( $this->items as $item ) {
-			$this->total += ( $item['details']['price'] * 100 );
+			$this->total += ( $item['details']['price'] * $item['quantity'] * 100 );
 		}
 		$this->total = $this->total / 100;
 	}
