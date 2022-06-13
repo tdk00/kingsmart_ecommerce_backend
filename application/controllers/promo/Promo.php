@@ -22,12 +22,12 @@ class Promo extends RestController
 //		sleep(2);
 		$userId = $this->post('user_id');
 		$limit = $this->post('limit');
-		if( empty( $limit ) || (int)$limit > 0 )
+		if( empty( $limit ) || ! (int)$limit > 0 )
 		{
 			$limit = 0;
 		}
 
-		$promoProducts = $this->PromoModel->getPromoProducts( (int)$userId, $limit );
+		$promoProducts = $this->PromoModel->getPromoProducts( (int)$userId, (int)$limit );
 		if( count( $promoProducts ) == 0 )
 		{
 			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );

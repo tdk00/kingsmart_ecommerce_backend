@@ -62,11 +62,15 @@ class Category extends RestController
 
 		if( $categoryId == -1 )
 		{
-			$productList = $this->CategoryModel->getFavoriteProducts( $userId, $sortBy );
+			$productList = $this->CategoryModel->getFavoriteProducts( (int)$userId, $sortBy );
+		}
+		elseif ( $categoryId == -2 )
+		{
+			$productList = $this->CategoryModel->getAllPromoProducts( (int)$userId, $sortBy );
 		}
 		elseif ( $categoryId > 0 )
 		{
-			$productList = $this->CategoryModel->getProductByCategoryId( $userId, $categoryId, $sortBy );
+			$productList = $this->CategoryModel->getProductByCategoryId( (int)$userId, $categoryId, $sortBy );
 		}
 		else
 		{
@@ -101,7 +105,7 @@ class Category extends RestController
 		}
 
 
-		$productList = $this->CategoryModel->getSearchResults( $userId, $sortBy, $searchKeyWord );
+		$productList = $this->CategoryModel->getSearchResults( (int)$userId, $sortBy, $searchKeyWord );
 
 		if( count( $productList ) == 0 )
 		{

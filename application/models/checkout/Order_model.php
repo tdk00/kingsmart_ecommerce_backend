@@ -27,4 +27,35 @@ class Order_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+
+	public function getOrderById( $userId, $orderId )
+	{
+		$this->db->select('*');
+		$this->db->from('order');
+		$this->db->where('userId', $userId);
+		$this->db->where('id', $orderId);
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function getOrderItems( $userId, $orderId )
+	{
+		$this->db->select('*');
+		$this->db->from('order_item');
+		$this->db->where('orderId', $orderId);
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function getOrdersByDateRange( $userId, $dateFrom, $dateTo )
+	{
+		$this->db->select('*');
+		$this->db->from('order');
+		$this->db->where('createdAt >= ', $dateFrom);
+		$this->db->where('createdAt <= ', $dateTo);
+		$this->db->where('userId', $userId);
+		$this->db->order_by('id', 'DESC');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
 }
