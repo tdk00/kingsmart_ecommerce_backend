@@ -15,11 +15,25 @@ class News extends RestController
 		parent::__construct();
 		$this->load->model('main/news_model', "NewsModel");
 		$this->load->library('form_validation');
+		header("Access-Control-Allow-Origin: *");
+		$this->load->library('Authorization_Token');
+		/**
+		 * User Token Validation
+		 */
+		$this->is_valid_token = $this->authorization_token->validateToken();
+		$this->userId = 0;
+		if ( ! empty($this->is_valid_token) && $this->is_valid_token['status'] === TRUE )
+		{
+			$this->userId = (int)$this->is_valid_token['data']->id;
+		}
+		else
+		{
+			$this->response( [ "status" => FALSE, "data" => ['message' => "invalid token"] ] , 200 );
+		}
 	}
 
 	public function fetch_news_by_id_post()
 	{
-//		sleep(2);
 		$newsId = $this->post('news_id');
 		if( empty( $newsId ) || ! (int)$newsId > 0 )
 		{

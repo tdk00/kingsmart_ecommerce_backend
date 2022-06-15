@@ -12,18 +12,44 @@ class Authentication_model extends CI_Model
 			"mobile" => $mobile
 		];
 		$this->db->insert('user', $data );
+		$insert_id = $this->db->insert_id();
+		$this->createUserShoppingCart( $insert_id );
+		return $insert_id;
+	}
+
+	private function createUserShoppingCart( $userId ){
+		$data = [
+			"userId" => $userId
+		];
+		$this->db->insert('cart', $data );
 		return $this->db->insert_id();
 	}
 
-	public function insertOtp($otp, $user_id, $expired )
+	public function insertOtp($otp, $userId, $expired )
 	{
 		$data = [
-			"user_id" => $user_id,
+			"user_id" => $userId,
 			"otp" => $otp,
 			"expired" => $expired
 		];
+
+		if( ! $this->userShoppingCartExists( $userId ) )
+		{
+			$this->createUserShoppingCart( $userId );
+		}
+
 		$this->db->insert('user_authentication', $data );
 		return $this->db->insert_id();
+	}
+
+	private function userShoppingCartExists( $userId ){
+		$this->db->select('*');
+		$this->db->from('cart');
+		$this->db->where('userId', $userId);
+		$query = $this->db->get();
+		$result_array = $query->result_array();
+
+		return count($result_array) > 0 ? true : false;
 	}
 
 	public function getUserId( $mobile )

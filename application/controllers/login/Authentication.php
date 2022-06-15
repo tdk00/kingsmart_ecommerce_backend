@@ -27,7 +27,14 @@ class Authentication extends RestController
 	{
 		$mobile = $this->post( 'mobile' );
 
+
+		if( empty($mobile) || strlen($mobile) < 8)
+		{
+			$this->response( [ "status" => FALSE ] , 200 );
+		}
+
 		$mobile = "00".str_replace(['+', '-', ' ', '(', ')'],'', $mobile );
+
 
 		if( ! $this->validate_mobile($mobile))
 		{
@@ -75,7 +82,8 @@ class Authentication extends RestController
 			if( $otpIsTrue )
 			{
 				$this->load->library('Authorization_Token');
-				$token_data['user_id'] = $user_id;
+				$token_data['id'] = $user_id;
+				$token_data['mobile'] = $mobile;
 				$token_data['time'] = time();
 
 				$user_token = $this->authorization_token->generateToken( $token_data );
@@ -104,6 +112,8 @@ class Authentication extends RestController
 		$otp = rand(1000, 9999);
 		$lifetime = 900; // seconds
 		$expired = time() + $lifetime;
+
+		$otp = 1234; // bu test ucun beledir , silinmelidir setir
 		return $this->AuthenticationModel->insertOtp( $otp, $user_id, $expired );
 	}
 

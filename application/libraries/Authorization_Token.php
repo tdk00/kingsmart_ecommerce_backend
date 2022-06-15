@@ -31,7 +31,7 @@ class Authorization_Token
     /**
      * Request Header Name
      */
-    protected $token_header = ['authorizationKinsgmart','AuthorizationKinsgmart'];
+    protected $token_header = ['authorizationkinsgmart','Authorizationkinsgmart'];
 
     /**
      * Token Expire Time

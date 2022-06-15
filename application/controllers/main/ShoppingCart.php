@@ -21,15 +21,27 @@ class ShoppingCart extends RestController
 		$this->load->library('form_validation');
 		$this->load->library('shoppingCartLibrary');
 		$this->cart = new shoppingCartLibrary();
+
+		header("Access-Control-Allow-Origin: *");
+		$this->load->library('Authorization_Token');
+		/**
+		 * User Token Validation
+		 */
+		$this->is_valid_token = $this->authorization_token->validateToken();
+		$this->userId = 0;
+		if ( ! empty($this->is_valid_token) && $this->is_valid_token['status'] === TRUE )
+		{
+			$this->userId = (int)$this->is_valid_token['data']->id;
+		}
+		else
+		{
+			$this->response( [ "status" => FALSE, "data" => ['message' => "invalid token"] ] , 200 );
+		}
+
 	}
 	public function get_cart_post()
 	{
-
-		$userId = $this->post( 'user_id' );
-
-		$this->cart->setUserId( $userId )->setCartId()->setItems()->setTotal();
-
-
+		$this->cart->setUserId( $this->userId )->setCartId()->setItems()->setTotal();
 		$cartItems = $this->cart->getItems();
 		$cartId = $this->cart->getCartId();
 		$cartTotal = $this->cart->getTotal();
@@ -45,10 +57,9 @@ class ShoppingCart extends RestController
 
 	public function update_cart_post()
 	{
-		$userId = $this->post( 'user_id' );
 		$items = $this->post( 'items' );
 
-		$this->cart->setUserId($userId)->setCartId()->updateCart( $items );
+		$this->cart->setUserId( $this->userId )->setCartId()->updateCart( $items );
 
 		$this->response( [ "status" => TRUE ] , 200 );
 	}
