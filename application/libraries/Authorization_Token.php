@@ -119,7 +119,7 @@ class Authorization_Token
                          * Check Token Time Valid 
                          */
                         $time_difference = strtotime('now') - $token_decode->time;
-                        if( $time_difference >= $this->token_expire_time )
+                        if( $time_difference >= $this->token_expire_time && false)
                         {
                             return ['status' => FALSE, 'message' => 'Token Time Expire.'];
 
@@ -176,7 +176,8 @@ class Authorization_Token
                             return ['status' => FALSE, 'message' => 'User ID Not Define!'];
     
                         // Check Token Time
-                        }else if(empty($token_decode->time OR !is_numeric($token_decode->time))) {
+                        }
+						else if(empty($token_decode->time OR !is_numeric($token_decode->time))) {
                             
                             return ['status' => FALSE, 'message' => 'Token Time Not Define!'];
                         }
@@ -186,11 +187,12 @@ class Authorization_Token
                              * Check Token Time Valid 
                              */
                             $time_difference = strtotime('now') - $token_decode->time;
-                            if( $time_difference >= $this->token_expire_time )
+                            if( $time_difference >= $this->token_expire_time && false )
                             {
                                 return ['status' => FALSE, 'message' => 'Token Time Expire.'];
     
-                            }else
+                            }
+							else
                             {
                                 /**
                                  * All Validation False Return Data
