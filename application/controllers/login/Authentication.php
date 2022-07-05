@@ -45,7 +45,7 @@ class Authentication extends RestController
 		if ( ! $this->user_exists( $mobile ) )
 		{
 			$user_id = $this->AuthenticationModel->insertUser( $mobile );
-			$this->generate_otp( $user_id );
+			$this->generate_otp( $user_id, $mobile );
 			$this->response( [ "status" => TRUE ] , 200 );
 		}
 		else
@@ -53,7 +53,7 @@ class Authentication extends RestController
 			$user_id = $this->AuthenticationModel->getUserId( $mobile );
 			if( $user_id > 0 ) {
 				$this->AuthenticationModel->deleteUserOldOtp( $user_id );
-				$this->generate_otp( $user_id );
+				$this->generate_otp( $user_id, $mobile );
 				$this->response( [ "status" => TRUE ] , 200 );
 
 			}
@@ -107,19 +107,53 @@ class Authentication extends RestController
 	 * @var $expired - OTP nin vaxtinin biteceyi epoch time
 	 * @return integer sone elave edilen OTP - idsi ni qaytarir
 	 */
-	private function generate_otp( $user_id )
+	private function generate_otp( $user_id, $mobile )
 	{
 		$otp = rand(1000, 9999);
 		$lifetime = 900; // seconds
 		$expired = time() + $lifetime;
 
-		$otp = 1234; // bu test ucun beledir , silinmelidir setir
+//		$otp = 1234; // bu test ucun beledir , silinmelidir setir
+		$this->send_otp_sms( $otp, $mobile );
 		return $this->AuthenticationModel->insertOtp( $otp, $user_id, $expired );
 	}
 
 	private function user_exists( $mobile )
 	{
 		return $this->AuthenticationModel->getUserId( $mobile );
+	}
+
+	private function send_otp_sms( $otp, $mobile )
+	{
+		$mobile = str_replace('00994', '0', $mobile);
+
+		$xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+				<SMS-InsRequest>
+    			<CLIENT from="Kingsmart" pwd="test" user="test"/>
+    			<INSERT datacoding="0" to="'.$mobile.'">
+    			<TEXT> Şifrə: '. $otp .'  </TEXT>
+    			</INSERT>
+				</SMS-InsRequest>';
+
+		$url = "http://89.108.99.126/sendsmsapi/"; // URL to make some test
+		$ch = curl_init($url);
+
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+		$data = curl_exec($ch);
+//		echo '<pre>';
+//		echo htmlentities($data);
+//		echo '</pre>';
+
+		if (curl_errno($ch))
+			curl_error($ch);
+		else
+			curl_close($ch);
+
+
 	}
 
 	private function validate_mobile( $mobile )
