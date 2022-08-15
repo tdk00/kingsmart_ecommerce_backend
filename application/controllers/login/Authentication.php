@@ -125,17 +125,35 @@ class Authentication extends RestController
 
 	private function send_otp_sms( $otp, $mobile )
 	{
-		$mobile = str_replace('00994', '0', $mobile);
+		$mobile = str_replace('00994', '994', $mobile);
 
 		$xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 				<SMS-InsRequest>
-    			<CLIENT from="Kingsmart" pwd="test" user="test"/>
+    			<CLIENT from="Kingsmart" pwd="kingapi123" user="kingapi"/>
     			<INSERT datacoding="0" to="'.$mobile.'">
     			<TEXT> Şifrə: '. $otp .'  </TEXT>
     			</INSERT>
 				</SMS-InsRequest>';
 
-		$url = "http://89.108.99.126/sendsmsapi/"; // URL to make some test
+		$xml = '<?xml version="1.0" encoding="UTF-8"?>
+<request>
+	<head>
+		<operation>submit</operation>
+		<login>kingapi</login>
+		<password>kingapi123</password>
+		<controlid>'.time().'kingsmart</controlid>
+		<title>Kingsmart</title>
+		<scheduled>NOW</scheduled>
+		<isbulk>false</isbulk>
+	</head>
+	<body>
+		<msisdn>'.$mobile.'</msisdn>
+		<message> Şifrə: '. $otp .'  </message>
+	</body>
+
+</request>';
+
+		$url = "http://www.sendsms.az/smxml/api"; // URL to make some test
 		$ch = curl_init($url);
 
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -144,9 +162,9 @@ class Authentication extends RestController
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		$data = curl_exec($ch);
-//		echo '<pre>';
-//		echo htmlentities($data);
-//		echo '</pre>';
+		//echo '<pre>';
+		//echo htmlentities($data);
+		//	echo '</pre>';
 
 		if (curl_errno($ch))
 			curl_error($ch);
