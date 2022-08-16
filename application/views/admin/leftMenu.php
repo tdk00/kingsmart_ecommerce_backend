@@ -6,7 +6,7 @@
 			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 		</li>
 		<li class="nav-item d-none d-sm-inline-block">
-			<a href="<?=base_url()?>admin/logout" class="nav-link">Çıxış</a>
+			<a href="<?=base_url()?>admin/login/logout" class="nav-link">Çıxış</a>
 		</li>
 	</ul>
 
@@ -45,7 +45,7 @@
 <!--					</ul>-->
 <!--				</li>-->
 				<li class="nav-item">
-					<a href="<?=base_url()?>categories_admin" class="nav-link">
+					<a href="<?=base_url()?>admin/category" class="nav-link">
 						<i class="nav-icon fas fa-th"></i>
 						<p>
 							Kateqoriyalar
@@ -53,7 +53,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a href="<?=base_url()?>products_admin" class="nav-link">
+					<a href="<?=base_url()?>admin/product" class="nav-link">
 						<i class="nav-icon fas fa-shopping-cart"></i>
 						<p>
 							Məhsullar
