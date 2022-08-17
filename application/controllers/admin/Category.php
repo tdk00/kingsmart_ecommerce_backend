@@ -27,12 +27,33 @@ class Category extends CI_Controller
 
 		$this->load->library('upload', $config);
 	}
-
 	public function index()
 	{
 		$categories = $this->AdminCategoryModel->getAllCategories();
 		$this->load->view('admin/category/category_list', ['categories' => $categories]);
 	}
+
+	public function search( $categoryId )
+	{
+		$keyword = $this->input->post('keyword');
+		$products = $this->AdminCategoryModel->searchProduct( $keyword, $categoryId );
+		$this->load->view('admin/category/search_result', ['products' => $products]);
+	}
+
+	public function addProductToCategory( $categoryId )
+	{
+		$productId = $this->input->post('productId');
+		$insertId = $this->AdminCategoryModel->addProductToCategory( $productId, $categoryId );
+		echo $insertId;
+	}
+
+	public function deleteProductFromCategory( $categoryId )
+	{
+		$productId = $this->input->post('productId');
+		$this->AdminCategoryModel->deleteProductFromCategory( $productId, $categoryId );
+	}
+
+
 
 	public function add_new()
 	{
@@ -43,11 +64,15 @@ class Category extends CI_Controller
 	{
 		$categoryData = $this->AdminCategoryModel->getCategoryById($id);
 
+		$products = $this->AdminCategoryModel->getAllProducts( $id );
+
+
 		if ( count($categoryData) > 0 ) {
 			$this->load->view(
 				'admin/category/edit',
 				[
-					'categoryData' => $categoryData[0]
+					'categoryData' => $categoryData[0],
+					'products' => $products
 				]
 			);
 		} else {

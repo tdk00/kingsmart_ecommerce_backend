@@ -39,7 +39,7 @@
 						<!-- general form elements -->
 						<div class="card card-primary">
 							<div class="card-header">
-								<h3 class="card-title">Yeni Məhsul</h3>
+								<h3 class="card-title"><?= $categoryData['title'] ?></h3>
 							</div>
 							<!-- /.card-header -->
 							<!-- form start -->
@@ -47,10 +47,10 @@
 								<div class="card-body">
 									<div class="form-group">
 										<label for="title"> Kateqoriya adı </label>
-										<input value="<?= $categoryData['title'] ?>" type="text" name="title" class="form-control" id="title" required placeholder="Məhsul adı">
+										<input value="<?= $categoryData['title'] ?>" type="text" name="title" class="form-control" id="title" required placeholder="Kateqoriya adı">
 									</div>
 									<div class="form-group">
-										<label for="exampleInputFile">Məhsul şəkli </label>
+										<label for="exampleInputFile">Kateqoriya şəkli </label>
 										<div class="input-group">
 											<div class="custom-file">
 												<input type="file" name="category_image" class="custom-file-input" id="category_image">
@@ -77,6 +77,53 @@
 							</form>
 						</div>
 
+					</div>
+					<div class="col-md-6 pt-2">
+						<!-- /.card -->
+
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">Məhsullar</h3>
+							</div>
+
+							<!-- /.card-header -->
+							<div class="card-body p-0">
+								<div class="row pl-2">
+									<div class="col-md-12">
+										<div id="example1_filter" class="dataTables_filter">
+											<label>Search:<input id="search" type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label>
+										</div>
+									</div>
+								</div>
+								<table class="table table-striped">
+									<thead>
+									<tr>
+										<th style="width: 10px">#</th>
+										<th>Məhsul adı</th>
+										<th>Qiymət</th>
+										<th style="width: 40px">Seç</th>
+									</tr>
+									</thead>
+									<tbody id="searchResult">
+									<?php foreach ( $products as $product) : ?>
+										<tr>
+											<td><?= $product['id']?></td>
+											<td><?= $product['title'] ?></td>
+											<td>
+												<?= $product['price'] ?>
+											</td>
+											<td>
+												<input type="checkbox" <?= $product['inCategory'] > 0 ? 'checked' : '' ?> productId="<?= $product['id'] ?>"  id="customCheckbox<?= $product['price'] ?>" value="option<?= $product['price'] ?>" onchange="updateSection(event)">
+											</td>
+										</tr>
+									<?php endforeach; ?>
+
+									</tbody>
+								</table>
+							</div>
+							<!-- /.card-body -->
+						</div>
+						<!-- /.card -->
 					</div>
 					<!--/.col (left) -->
 				</div>
@@ -105,6 +152,51 @@
 <!--<script src="--><?//=base_url()?><!--assets/admin/dist/js/demo.js"></script>-->
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?=base_url()?>assets/admin/dist/js/pages/dashboard3.js"></script>
+
+<script>
+	$("#search").keyup(function(event) {
+		var regex = new RegExp("^[a-zA-Z0-9\b]+$");
+		var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+		if (!regex.test(key)) {
+			event.preventDefault();
+			return false;
+		}
+			if( $(this).val().length > 2 || $(this).val().length == 0) {
+			var keyword = $(this).val();
+			$.ajax({
+				method: "POST",
+				url: "<?=base_url()?>admin/category/search/<?= $categoryData['id'] ?>",
+				data: { keyword: keyword}
+			})
+				.done(function( html ) {
+					$("#searchResult").html( html );
+				});
+		}
+
+	});
+</script>
+
+<script>
+	function updateSection(event){
+		var selectElement = event.target;
+
+		var productId = selectElement.getAttribute('productId');
+		if( event.target.checked ) {
+			$.ajax({
+				method: "POST",
+				url: "<?=base_url()?>admin/category/addProductToCategory/<?= $categoryData['id'] ?>",
+				data: { productId: productId}
+			})
+		}
+		else {
+			$.ajax({
+				method: "POST",
+				url: "<?=base_url()?>admin/category/deleteProductFromCategory/<?= $categoryData['id'] ?>",
+				data: { productId: productId}
+			})
+		}
+	}
+</script>
 
 </body>
 </html>

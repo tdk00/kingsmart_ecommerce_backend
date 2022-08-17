@@ -15,6 +15,41 @@ class Admin_category_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function getAllProducts( $categoryId )
+	{
+		$query = $this->db->query("SELECT *, IFNULL(product_category.productId, 0) AS 'inCategory' FROM product LEFT JOIN product_category ON product_category.categoryId = ".$categoryId." AND product_category.productId = product.id ORDER BY inCategory DESC LIMIT 20 ;");
+		return $query->result_array();
+	}
+
+	public function searchProduct( $keyword, $categoryId )
+	{
+		$query = $this->db->query("SELECT *, IFNULL(product_category.productId, 0) AS 'inCategory' FROM product LEFT JOIN product_category ON product_category.categoryId = ".$categoryId." AND product_category.productId = product.id WHERE product.title LIKE '%".$keyword."%' ORDER BY inCategory DESC LIMIT 20;");
+		return $query->result_array();
+	}
+
+	public function addProductToCategory( $productId, $categoryId )
+	{
+		$data = [
+			"productId" => $productId,
+			"categoryId" => $categoryId
+		];
+		$this->db->insert('product_category', $data );
+		return $this->db->insert_id();
+	}
+
+	public function deleteProductFromCategory($productId,  $categoryId = 0 )
+	{
+		$removed = $this->db->delete( 'product_category', array("productId" => $productId, "categoryId" => $categoryId ) );
+
+		if( $removed )
+		{
+			return true;
+		}
+
+		return false;
+
+	}
+
 	public function getCategoryById( $id = 0 )
 	{
 		$this->db->select('*');
