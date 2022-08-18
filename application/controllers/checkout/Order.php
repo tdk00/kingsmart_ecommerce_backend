@@ -142,6 +142,9 @@ class Order extends RestController
 				case 2 :
 					$orderDetails[0]['status'] = 'Təhvil verildi';
 					break;
+				case -1 :
+					$orderDetails[0]['status'] = 'Ləğv edimiş';
+					break;
 				default :
 					$orderDetails[0]['status'] = 'Hazırlanır';
 					break;
