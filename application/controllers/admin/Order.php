@@ -42,7 +42,14 @@ class Order extends CI_Controller
 			redirect('admin/order/index/4');
 		}
 	}
-	public function details(){}
-	public function listByStatus(){}
+	public function order_details( $orderId = 0 ){
+		$orderDetails = $this->AdminOrderModel->getOrderDetails( $orderId );
+		$orderProducts = $this->AdminOrderModel->getOrderProducts( $orderId );
+		if( count($orderDetails) > 0 ){
+			$this->load->view('admin/orders/order_details2', [ 'order_details' => $orderDetails[0], 'order_products' => $orderProducts ]);
+		}
+
+	}
+
 
 }
