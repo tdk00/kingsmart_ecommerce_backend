@@ -61,15 +61,15 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a href="<?=base_url()?>extras_admin" class="nav-link">
+					<a href="<?=base_url()?>admin/news" class="nav-link">
 						<i class="nav-icon far fa-plus-square"></i>
 						<p>
-							Extralar
+							Xəbərlər
 						</p>
 					</a>
 				</li>
 				<li class="nav-item">
-					<a href="<?=base_url()?>orders_admin" class="nav-link">
+					<a href="<?=base_url()?>admin/order" class="nav-link">
 						<i class="nav-icon fas fa-book"></i>
 						<p>
 							Sifarişlər
@@ -77,10 +77,10 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a href="<?=base_url()?>kitchen_admin" class="nav-link">
+					<a href="<?=base_url()?>admin/slider" class="nav-link">
 						<i class="nav-icon fas fa-book"></i>
 						<p>
-							Mətbəx
+							Slider
 						</p>
 					</a>
 				</li>

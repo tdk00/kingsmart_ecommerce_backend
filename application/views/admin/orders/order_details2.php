@@ -28,15 +28,19 @@
 	<!-- Main Sidebar Container -->
 
 	<?php $this->load->view('admin/leftMenu'); ?>
-
-	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>Sifariş detalları - <?= $order_details['orderNumber'] ?> </h1>
+						<h1><?= $order_details['orderNumber'] ?></h1>
+					</div>
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="<?=base_url()?>admin/order">Sifarişlər</a></li>
+							<li class="breadcrumb-item active">Sifarişin detalları</li>
+						</ol>
 					</div>
 				</div>
 			</div><!-- /.container-fluid -->
@@ -46,17 +50,39 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-12">
+
+
 						<!-- Main content -->
 						<div class="invoice p-3 mb-3">
 							<!-- title row -->
 							<div class="row">
 								<div class="col-12">
-									<h4>
-										<i class="fas fa-globe"></i> Sifarişin məhsulları
+									<h4> Kingsmart
+										<small class="float-right">Tarix: <?= $order_details['createdAt'] ?></small>
 									</h4>
 								</div>
 								<!-- /.col -->
 							</div>
+							<!-- info row -->
+							<div class="row invoice-info">
+								<!-- /.col -->
+								<div class="col-sm-8 invoice-col">
+									Müştəri məlumatları
+									<address>
+										<strong><?= $order_details['user_fullName'] ?></strong><br>
+										<?= $order_details['city'] ?><br>
+										<?= $order_details['address'] ?><br>
+										<?= $order_details['postal'] ?><br>
+										Phone: <?= $order_details['user_phone'] ?><br>
+									</address>
+								</div>
+								<!-- /.col -->
+								<div class="col-sm-4 invoice-col">
+									<b>Sifariş nömrəsi:</b> <?= $order_details['orderNumber'] ?> <br>
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
 
 							<!-- Table row -->
 							<div class="row">
@@ -72,12 +98,12 @@
 										</thead>
 										<tbody>
 										<?php foreach ( $order_products as $product ): ?>
-										<tr>
-											<td><?= $product['title'] ?>
-											<td><?= $product['price'] ?>
-											<td><?= $product['quantity'] ?></td>
-											<td><?= $product['total_price'] ?></td>
-										</tr>
+											<tr>
+												<td><?= $product['title'] ?>
+												<td><?= $product['price'] ?>
+												<td><?= $product['quantity'] ?></td>
+												<td><?= $product['total_price'] ?></td>
+											</tr>
 										<?php endforeach; ?>
 
 										</tbody>
@@ -87,7 +113,30 @@
 							</div>
 							<!-- /.row -->
 
+							<div class="row">
+								<!-- /.col -->
+								<div class="col-8">
+									<p class="lead"></p>
+
+									<div class="table-responsive">
+										<table class="table">
+											<tr>
+												<th>Çatdırılma :</th>
+												<td> 0 AZN </td>
+											</tr>
+											<tr>
+												<th> Cəmi </th>
+												<td><?= $order_details['total'] ?> AZN <br></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
+
 							<!-- this row will not appear when printing -->
+
 						</div>
 						<!-- /.invoice -->
 					</div><!-- /.col -->
@@ -97,33 +146,15 @@
 		<!-- /.content -->
 	</div>
 	<!-- /.content-wrapper -->
+
+
+	<!-- Control Sidebar -->
+	<aside class="control-sidebar control-sidebar-dark">
+		<!-- Control sidebar content goes here -->
+	</aside>
+	<!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
-
-<!-- REQUIRED SCRIPTS -->
-
-<!-- jQuery -->
-<script src="<?=base_url()?>assets/admin/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="<?=base_url()?>assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE -->
-<script src="<?=base_url()?>assets/admin/dist/js/adminlte.js"></script>
-
-<!-- OPTIONAL SCRIPTS -->
-<script src="<?=base_url()?>assets/admin/plugins/chart.js/Chart.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<!--<script src="--><?//=base_url()?><!--assets/admin/dist/js/demo.js"></script>-->
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?=base_url()?>assets/admin/dist/js/pages/dashboard3.js"></script>
-
-
-<script>
-	$(".orderDetailsButton").on('click', function () {
-		let order_id = $(this).data('order-id');
-		window.location.href = "<?=base_url()?>kitchen_admin/order_details/" + order_id + "";
-	})
-</script>
 
 </body>
 </html>

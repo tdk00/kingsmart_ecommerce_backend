@@ -49,6 +49,7 @@ class Order_model extends CI_Model
 
 	public function getOrdersByDateRange( $userId, $dateFrom, $dateTo )
 	{
+		$dateTo = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($dateTo)));
 		$this->db->select('*');
 		$this->db->from('order');
 		$this->db->where('createdAt >= ', $dateFrom);

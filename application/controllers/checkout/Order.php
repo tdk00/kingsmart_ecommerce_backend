@@ -107,20 +107,11 @@ class Order extends RestController
 			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
 		}
 		$lastOrder = $this->OrderModel->getLastOrder( $this->userId );
+
 		if( count( $lastOrder ) )
 		{
-			switch ( $lastOrder[0]['status'] ) {
-				case 1 :
-					$lastOrder[0]['status'] = 'Hazırdır';
-					break;
-				case 2 :
-					$lastOrder[0]['status'] = 'Təhvil verildi';
-					break;
-				default :
-					$lastOrder[0]['status'] = 'Hazırlanır';
-					break;
-			}
-				$this->response( [ "status" => TRUE, "data" => $lastOrder[0] ] , 200 );
+			$lastOrder[0]['status'] = $this->getStatusString( $lastOrder[0]['status'] );
+			$this->response( [ "status" => TRUE, "data" => $lastOrder[0] ] , 200 );
 		}
 		$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
 	}
@@ -135,20 +126,7 @@ class Order extends RestController
 		$orderDetails = $this->OrderModel->getOrderById( $this->userId, $orderId );
 		if( count( $orderDetails ) > 0 )
 		{
-			switch ( $orderDetails[0]['status'] ) {
-				case 1 :
-					$orderDetails[0]['status'] = 'Hazırdır';
-					break;
-				case 2 :
-					$orderDetails[0]['status'] = 'Təhvil verildi';
-					break;
-				case -1 :
-					$orderDetails[0]['status'] = 'Ləğv edimiş';
-					break;
-				default :
-					$orderDetails[0]['status'] = 'Hazırlanır';
-					break;
-			}
+			$orderDetails[0]['status'] = $this->getStatusString( $orderDetails[0]['status'] );
 
 			$items = $this->OrderModel->getOrderItems( $this->userId, $orderId );
 
@@ -169,25 +147,13 @@ class Order extends RestController
 			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
 		}
 		$orders = $this->OrderModel->getOrdersByDateRange( $this->userId, $dateFrom, $dateTo );
-		if( count( $orders ) )
-		{
 			foreach ( $orders as $orderKey => $orderValue )
 			{
 				$orders[$orderKey]['createdAt'] = substr($orderValue['createdAt'],0, 10);
-				switch ( $orderValue['status'] ) {
-					case 1 :
-						$orders[$orderKey]['status'] = 'Hazırdır';
-						break;
-					case 2 :
-						$orders[$orderKey]['status'] = 'Təhvil verildi';
-						break;
-					default :
-						$orders[$orderKey]['status'] = 'Hazırlanır';
-						break;
-				}
+				$orders[$orderKey]['status'] = $this->getStatusString( $orders[$orderKey]['status'] );
 			}
 			$this->response( [ "status" => TRUE, "data" => $orders ] , 200 );
-		}
+
 		$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
 	}
 
@@ -221,5 +187,22 @@ class Order extends RestController
 			$total += ( $item['details']['price'] * $item['quantity'] * 100 );
 		}
 		return  $total / 100;
+	}
+
+	private function getStatusString( $statusId ){
+		switch ( $statusId ) {
+			case -1 :
+				return 'Ləğv edimiş';
+			case 0 :
+				return 'Təsdiq edilməmiş';
+			case 1 :
+				return 'Hazırlanır';
+			case 2 :
+				return 'Hazırdır';
+			case 3 :
+				return 'Təhvil verildi';
+			default :
+				return '-';
+		}
 	}
 }
