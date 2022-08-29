@@ -19,7 +19,7 @@ class Login extends CI_Controller
 	{
 		if ( $this->session->userdata('logged_in') )
 		{
-			redirect('admin/dashboard/');
+			redirect('admin/category/');
 		}
 		$this->load->view('admin/login/index');
 	}

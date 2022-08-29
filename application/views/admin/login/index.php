@@ -96,7 +96,7 @@
 					data = JSON.parse( data );
 					if( data.status )
 					{
-						window.location.href = "<?=base_url()?>dashboard/";
+						window.location.href = "<?=base_url()?>admin/category";
 					}
 					else
 					{
