@@ -24,22 +24,18 @@ class Admin_news_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function insertNews( $title, $content, $image )
+	public function insertNews( $image )
 	{
 		$data = [
-			"title" => $title,
-			"content" => $content,
 			"image" => $image
 		];
 		$this->db->insert('news', $data );
 		return $this->db->insert_id();
 	}
 
-	public function updateNews( $newsId, $title, $content, $image )
+	public function updateNews( $newsId, $image )
 	{
 		$data = [
-			"title" => $title,
-			"content" => $content,
 		];
 
 		if( ! empty( $image ) )

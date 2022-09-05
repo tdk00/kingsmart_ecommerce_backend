@@ -44,14 +44,14 @@
 							<!-- form start -->
 							<form method="post" action="<?=base_url()?>admin/news/insert" enctype="multipart/form-data">
 								<div class="card-body">
-									<div class="form-group">
-										<label for="title">Başlıq </label>
-										<input type="text" name="title" class="form-control" id="title" required placeholder="Başlıq">
-									</div>
-									<div class="form-group">
-										<label for="summary"> Məlumat </label>
-										<textarea id="summernote" name="content"></textarea>
-									</div>
+<!--									<div class="form-group">-->
+<!--										<label for="title">Başlıq </label>-->
+<!--										<input type="text" name="title" class="form-control" id="title" required placeholder="Başlıq">-->
+<!--									</div>-->
+<!--									<div class="form-group">-->
+<!--										<label for="summary"> Məlumat </label>-->
+<!--										<textarea id="summernote" name="content"></textarea>-->
+<!--									</div>-->
 									<div class="form-group">
 										<label for="exampleInputFile">Xəbər şəkli </label>
 										<div class="input-group">

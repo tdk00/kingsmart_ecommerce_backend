@@ -32,19 +32,14 @@ class News extends RestController
 		}
 	}
 
-	public function fetch_news_by_id_post()
+	public function fetch_all_news_post()
 	{
-		$newsId = $this->post('news_id');
-		if( empty( $newsId ) || ! (int)$newsId > 0 )
-		{
-			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
-		}
 
-		$news = $this->NewsModel->getNewsById( (int)$newsId );
+		$news = $this->NewsModel->getAllNews();
 		if( count( $news ) == 0 )
 		{
 			$this->response( [ "status" => FALSE, "data" => [] ] , 200 );
 		}
-		$this->response( [ "status" => TRUE, "data" => $news[0] ] , 200 );
+		$this->response( [ "status" => TRUE, "data" => $news ] , 200 );
 	}
 }

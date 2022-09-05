@@ -15,4 +15,12 @@ class News_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function getAllNews()
+	{
+		$this->db->select('*');
+		$this->db->from('news');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
 }

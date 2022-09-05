@@ -64,7 +64,7 @@
 					<a href="<?=base_url()?>admin/news" class="nav-link">
 						<i class="nav-icon far fa-plus-square"></i>
 						<p>
-							Xəbərlər
+							Kampaniyalar
 						</p>
 					</a>
 				</li>

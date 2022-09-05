@@ -92,6 +92,11 @@ class Admin_category_model extends CI_Model
 
 	public function deleteCategory( $categoryId = 0 )
 	{
+		$product_cat_rel_removed = $this->db->delete( 'product_category', array('categoryId' => $categoryId ) );
+		if( ! $product_cat_rel_removed )
+		{
+			return false;
+		}
 		$removed = $this->db->delete( 'category', array('id' => $categoryId ) );
 
 		if( $removed )

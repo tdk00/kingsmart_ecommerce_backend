@@ -35,10 +35,10 @@
 					<div class="col-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Xəbər siyahisi</h3>
+								<h3 class="card-title">Kampaniya şəkilləri</h3>
 								<div class="card-tools">
 									<div class="input-group input-group-sm" style="width: 150px;">
-										<a href="<?=base_url()?>admin/news/add_new" class="btn btn-block btn-primary">Yeni Xəbər</a>
+										<a href="<?=base_url()?>admin/news/add_new" class="btn btn-block btn-primary">Yeni şəkil</a>
 									</div>
 								</div>
 							</div>
@@ -49,15 +49,15 @@
 									<thead>
 									<tr>
 										<th>ID</th>
-										<th> Başlıq </th>
+										<th> Şəkil </th>
 										<th> Sil </th>
 									</tr>
 									</thead>
 									<tbody>
 									<?php foreach ($news as $newsValue) : ?>
-										<tr style="cursor: pointer"  onclick="window.location='<?=base_url().'admin/news/edit/'.$newsValue['id']?>';">
+										<tr>
 											<td> <?=$newsValue['id']?> </td>
-											<td> <?=$newsValue['title']?> </td>
+											<td> <img width="70"  src="<?=base_url().$newsValue['image']?>"> </td>
 											<td onclick="event.stopPropagation(); return false;"> <button class="btn btn-danger deleteNews" data-news-id="<?=$newsValue['id']?>"> Sil </td>
 										</tr>
 									<?php endforeach; ?>

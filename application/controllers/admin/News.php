@@ -61,11 +61,7 @@ class News extends CI_Controller
 
 	public function insert()
 	{
-		$title = $this->input->post('title');
-		$content = $this->input->post('content');
 
-		if( !empty( $title ) && !empty( $content ) )
-		{
 			if ( ! $this->upload->do_upload('news_image'))
 			{
 				$error = array('error' => $this->upload->display_errors());
@@ -78,29 +74,16 @@ class News extends CI_Controller
 				$file_name = ! empty( $data['upload_data']['file_name'] ) ? $data['upload_data']['file_name'] : "";
 
 				$this->AdminNewsModel->insertNews(
-					$title,
-					$content,
 					"assets/images/news/".$file_name
 				);
 				redirect("admin/news", 'refresh');
 
 			}
-		}
-		else
-		{
-			echo "Bütün xanaları doldurun ";
-		}
 
 	}
 
 	public function update( $id = 0 )
 	{
-		$title = $this->input->post('title');
-		$content = $this->input->post('content');
-
-
-		if(  !empty( $title ) && !empty( $content ) )
-		{
 			if ( ! $this->upload->do_upload('news_image'))
 			{
 				$file_name = "";
@@ -113,16 +96,9 @@ class News extends CI_Controller
 
 			$this->AdminNewsModel->updateNews(
 				$id,
-				$title,
-				$content,
 				$file_name
 			);
 			redirect("admin/news", 'refresh');
-		}
-		else
-		{
-			echo "Bütün xanaları doldurun ";
-		}
 
 	}
 
