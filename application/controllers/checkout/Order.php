@@ -87,8 +87,11 @@ class Order extends RestController
 								'quantity' => $itemValue['quantity'],
 								'price' => $productDetails['price'],
 								'oldPrice' => $productDetails['oldPrice'],
+								'productName' => $productDetails['title'],
+								'productImage' => $productDetails['image']
 
 							];
+
 						$this->OrderModel->insertOrderItem( $orderItem );
 					}
 				}
@@ -168,15 +171,8 @@ class Order extends RestController
 	private function setOrderItemDetails( $items ){
 		foreach ( $items as $itemKey => $itemValue )
 		{
-			$productDetails = $this->ProductModel->getProductById( (int)$itemValue['productId'], $this->userId );
-			if( count($productDetails) > 0 ){
-				$items[$itemKey]['name'] = $productDetails['title'];
-				$items[$itemKey]['image'] = $productDetails['image'];
-			}
-			else{
-				$items[$itemKey]['name'] = '';
-				$items[$itemKey]['image'] = '';
-			}
+			$items[$itemKey]['name'] = $itemValue['productName'];
+			$items[$itemKey]['image'] = $itemValue['productImage'];
 		}
 		return $items;
 	}

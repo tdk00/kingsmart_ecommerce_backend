@@ -66,7 +66,7 @@ class Admin_product_model extends CI_Model
 	public function deleteProduct( $productId = 0 )
 	{
 		$this->db->delete( 'product_category', array('productId' => $productId ) );
-		$this->db->delete( 'order_item', array('productId' => $productId ) );
+//		$this->db->delete( 'order_item', array('productId' => $productId ) );
 		$this->db->delete( 'cart_item', array('productId' => $productId ) );
 		$this->db->delete( 'user_favorite', array('productId' => $productId ) );
 		$removed = $this->db->delete( 'product', array('id' => $productId ) );
