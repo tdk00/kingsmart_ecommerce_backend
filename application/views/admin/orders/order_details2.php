@@ -97,12 +97,12 @@
 										</tr>
 										</thead>
 										<tbody>
-										<?php foreach ( $order_products as $product ): ?>
+										<?php foreach ( $order_items as $item ): ?>
 											<tr>
-												<td><?= $product['title'] ?>
-												<td><?= $product['price'] ?>
-												<td><?= $product['quantity'] ?></td>
-												<td><?= $product['total_price'] ?></td>
+												<td><?= $item['productName'] ?>
+												<td><?= $item['price'] ?>
+												<td><?= $item['quantity'] ?></td>
+												<td><?= (float)$item['price'] * (float)$item['quantity'] ?></td>
 											</tr>
 										<?php endforeach; ?>
 

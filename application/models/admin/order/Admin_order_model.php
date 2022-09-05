@@ -42,9 +42,11 @@ class Admin_order_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getOrderProducts( $orderId = 0 ){
-		$orderId = $this->db->escape($orderId);
-		$query = $this->db->query('SELECT order_item.*, product.title, order_item.price * order_item.quantity AS total_price FROM `order_item` JOIN product ON product.id = order_item.productId WHERE order_item.orderId = '.$orderId);
+	public function getOrderItems($orderId = 0 ){
+		$this->db->select('*');
+		$this->db->from('order_item');
+		$this->db->where('orderId', $orderId);
+		$query = $this->db->get();
 		return $query->result_array();
 	}
 }
