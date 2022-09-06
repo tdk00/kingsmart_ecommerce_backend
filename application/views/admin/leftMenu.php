@@ -64,7 +64,7 @@
 					<a href="<?=base_url()?>admin/news" class="nav-link">
 						<i class="nav-icon far fa-plus-square"></i>
 						<p>
-							Kampaniyalar
+							Kampaniya şəkilləri
 						</p>
 					</a>
 				</li>
@@ -77,10 +77,10 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a href="<?=base_url()?>admin/slider" class="nav-link">
+					<a href="<?=base_url()?>admin/slider/edit/1" class="nav-link">
 						<i class="nav-icon fas fa-book"></i>
 						<p>
-							Slider
+							Kampanya
 						</p>
 					</a>
 				</li>

@@ -51,15 +51,6 @@
 										<input value="<?=$sliderData[0]['summary']?>" type="text" name="summary" class="form-control" id="summary" placeholder="Məlumat">
 									</div>
 									<div class="form-group">
-										<label for="slider_news_id"> Bağlantılı xəbər  </label>
-										<select name="slider_news_id" class="form-control" required>
-											<option value=""> Seçin </option>
-											<?php foreach ( $news as $newsValue ): ?>
-												<option <?= $sliderData[0]['newsId'] == $newsValue['id'] ? 'selected': ''?> value="<?= $newsValue['id'] ?>"> <?= $newsValue['title'] ?> </option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div class="form-group">
 										<label for="exampleInputFile">Slider şəkli </label>
 										<div class="input-group">
 											<div class="custom-file">
