@@ -61,6 +61,7 @@ class Product extends CI_Controller
 		$summary = $this->input->post('summary');
 		$price =  $this->input->post('price');
 		$oldPrice = $this->input->post('old_price');
+		$onlineMarket = $this->input->post('online_market') == "on";
 
 		if( !empty( $barkod ) && !empty( $title )  && !empty( $price ) )
 		{
@@ -81,7 +82,8 @@ class Product extends CI_Controller
 					$summary,
 					"assets/images/products/".$file_name,
 					$price,
-					$oldPrice
+					$oldPrice,
+					$onlineMarket
 				);
 				redirect("admin/product", 'refresh');
 
@@ -99,6 +101,7 @@ class Product extends CI_Controller
 		$summary = $this->input->post('summary');
 		$price =  $this->input->post('price');
 		$oldPrice = $this->input->post('old_price');
+		$onlineMarket = $this->input->post('online_market') == "on";
 
 		if( !empty( $barkod ) && !empty( $title )  && !empty( $price ) )
 		{
@@ -118,7 +121,8 @@ class Product extends CI_Controller
 				$summary,
 				$file_name,
 				$price,
-				$oldPrice
+				$oldPrice,
+				$onlineMarket
 			);
 			redirect("admin/product", 'refresh');
 		}

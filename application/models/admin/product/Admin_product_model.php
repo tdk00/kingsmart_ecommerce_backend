@@ -24,7 +24,7 @@ class Admin_product_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function insertProduct( $barkod, $title, $summary, $image, $price, $oldPrice )
+	public function insertProduct( $barkod, $title, $summary, $image, $price, $oldPrice, $onlineMarket )
 	{
 		$data = [
 			"barkod" => $barkod,
@@ -32,20 +32,22 @@ class Admin_product_model extends CI_Model
 			"summary" => $summary,
 			"image" => $image,
 			"price" => $price,
-			"oldPrice" => $oldPrice
+			"oldPrice" => $oldPrice,
+			"onlineMarket" => $onlineMarket
 		];
 		$this->db->insert('product', $data );
 		return $this->db->insert_id();
 	}
 
-	public function updateProduct( $productId, $barkod, $title, $summary, $image, $price, $oldPrice )
+	public function updateProduct( $productId, $barkod, $title, $summary, $image, $price, $oldPrice, $onlineMarket )
 	{
 		$data = [
 			"barkod" => $barkod,
 			"title" => $title,
 			"summary" => $summary,
 			"price" => $price,
-			"oldPrice" => $oldPrice
+			"oldPrice" => $oldPrice,
+			"onlineMarket" => $onlineMarket
 		];
 
 		if( ! empty( $image ) )

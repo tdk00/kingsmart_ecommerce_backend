@@ -66,6 +66,12 @@
 										<input type="number" step="0.01" name="old_price" class="form-control" id="old_price" placeholder="Köhnə qiymət">
 									</div>
 									<div class="form-group">
+										<div class="custom-control custom-checkbox">
+											<input class="custom-control-input" type="checkbox" id="customCheckbox1" name="online_market">
+											<label for="customCheckbox1" class="custom-control-label"> Onlayn satılan bilən məhsul </label>
+										</div>
+									</div>
+									<div class="form-group">
 										<label for="exampleInputFile">Məhsul şəkli </label>
 										<div class="input-group">
 											<div class="custom-file">
